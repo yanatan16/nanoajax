@@ -1,7 +1,7 @@
 ui: mocha-tdd
 server: test/server.js
 scripts:
-  - /nanoajax.js
+  - /nanoajax.min.js
 browsers:
   ## When you just want to run one
   # - name: ie

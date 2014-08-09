@@ -5,8 +5,8 @@ var express = require('express')
 app.use(require('morgan')('dev'))
 app.use(require('body-parser').urlencoded({extended:false}))
 
-app.get('/nanoajax.js', function (req, res) {
-  fs.createReadStream(__dirname + '/../index.js', {encoding:'utf8'})
+app.get('/nanoajax.min.js', function (req, res) {
+  fs.createReadStream(__dirname + '/../nanoajax.min.js', {encoding:'utf8'})
     .pipe(res)
 })
 

@@ -2,4 +2,8 @@ language: node_js
 node_js:
 - '0.10'
 before_script:
-  - npm install -g zuul
+- npm install -g zuul
+env:
+  global:
+  - secure: OLuQVJPIj6UlpkFVMKOwu2Pdlek4EyKNkUkKZsOyEy6S3cTGPeRM1NlKQe0nG/768iZncJtTuAdeKOVv3ibF87hMZ37PwrBuRgLd+ozdjHyVQSNxOa7yCNEbyfoWupZMh+J0yUpJZ7o64JzVvFqhviVubH8NyuutHIW2HXr1kug=
+  - secure: fyVvZPk6UC/8RZIWDxHc9FaADSynU/navn/qH3lBTnaP+B/YtTuqLOwlsSTEJDStbL05ChiZvMVD4t6Iwyd/pQqZwaY2C7GF8towbvgInT9/iuUkgi21xqQWPmbquEVxJJEAqjUY7pzwJ/jHMPK4YY0FCU6oeZhST7Xb84F5Eqc=

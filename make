@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-uglifyjs index.js -c -m -o nanoajax.min.js
+uglifyjs index.js --compress --mangle --wrap nanoajax -o nanoajax.min.js
