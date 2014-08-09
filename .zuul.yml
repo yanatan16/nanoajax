@@ -1,0 +1,21 @@
+ui: mocha-tdd
+server: test/server.js
+scripts:
+  - /nanoajax.js
+browsers:
+  ## When you just want to run one
+  # - name: ie
+  #   version: [8, 9]
+
+  - name: chrome
+    version: latest
+  - name: firefox
+    version: latest
+  - name: safari
+    version: latest
+  - name: ie
+    version: 8..latest
+  - name: iphone
+    version: oldest..latest
+  - name: android
+    version: oldest..latest

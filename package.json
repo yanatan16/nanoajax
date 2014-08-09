@@ -1,0 +1,32 @@
+{
+  "name": "nanoajax",
+  "version": "0.0.0",
+  "description": "A small ajax lib",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "body-parser": "^1.6.2",
+    "express": "^4.8.2"
+  },
+  "devDependencies": {
+    "body-parser": "^1.6.2",
+    "express": "^4.8.2",
+    "morgan": "^1.2.2"
+  },
+  "scripts": {
+    "test": "zuul -- test/index.js",
+    "test-local": "zuul --local -- test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yanatan16/nanoajax.git"
+  },
+  "author": "Jon Eisen <jon@joneisen.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yanatan16/nanoajax/issues"
+  },
+  "homepage": "https://github.com/yanatan16/nanoajax"
+}
