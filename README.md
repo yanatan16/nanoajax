@@ -7,7 +7,7 @@ nanoajax
 
 An ajax library you need a microscope to see.
 
-Weighs in at 345 bytes gzipped, 499 bytes minified. It is very basic, but cross-browser compatible
+Weighs in at 356 bytes gzipped, 534 bytes minified. It is very basic, but cross-browser compatible
 
 ## Install
 
