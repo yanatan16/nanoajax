@@ -2,7 +2,7 @@ nanoajax
 ========
 
 [![Build Status](https://travis-ci.org/yanatan16/nanoajax.svg)](https://travis-ci.org/yanatan16/nanoajax)
-![Selenium Test Status](https://saucelabs.com/browser-matrix/yanatan16.svg?auth=f556fd330d3c9d43739159ae4ce04604)
+
 
 
 An ajax library you need a microscope to see.
