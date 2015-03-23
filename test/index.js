@@ -9,7 +9,7 @@ function defineTests(ajax) {
   return function () {
     test('isfunc', function () {
       assert(typeof ajax === 'function')
-      assert(ajax.length === 3)
+      assert(ajax.length === 4)
     })
 
     test('get', function (done) {
@@ -45,6 +45,22 @@ function defineTests(ajax) {
           assert.equal(body, 'COORS')
           done()
         })
+      })
+    })
+
+    test('extra header', function (done) {
+      ajax('/header', {'X-Custom': 'custom'}, function (code, body) {
+        assert.equal(body, 'custom')
+        assert.equal(code, 200)
+        done()
+      })
+    })
+
+    test('json post', function (done) {
+      ajax('/post', '{"arg":"value","foo":"bar"}', {'Content-Type': 'application/json'}, function (code, body) {
+        assert.equal(body, 'OK')
+        assert.equal(code, 200)
+        done()
       })
     })
   }
