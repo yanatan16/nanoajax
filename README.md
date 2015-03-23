@@ -7,11 +7,11 @@ nanoajax
 
 An ajax library you need a microscope to see.
 
-Weighs in at 356 bytes gzipped, 534 bytes minified. It is very basic, but cross-browser compatible
+Weighs in at 403 bytes gzipped, 613 bytes minified. It is very basic, but cross-browser compatible
 
 ## Releases
 
-The latest release (v0.2) includes custom header support but is larger than the previous release, v0.1.1.
+The latest release (v0.2.1) includes custom header support but is larger than the previous release, v0.1.1.
 
 ## Install
 
