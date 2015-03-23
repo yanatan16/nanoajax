@@ -74,5 +74,22 @@ function defineTests(ajax) {
         done()
       })
     })
+
+    test('withCredentials', function (done) {
+      ajax('/cors-url', function (code, body) {
+        ajax({
+          url: body + '/cookie-setter'
+        , withCredentials: true
+        }, function (code, cookieValue) {
+          ajax({
+            url: body + '/cookie-verifier?cookie_value=' + cookieValue
+          , withCredentials: true
+          }, function (code) {
+            assert.equal(code, 200, 'Server could not verify cookie value')
+            done()
+          })
+        })
+      })
+    })
   }
 }
