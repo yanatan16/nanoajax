@@ -1,7 +1,8 @@
 exports.ajax = function (params, callback) {
   if (typeof params == 'string') params = {url: params}
   var headers = params.headers || {}
-    , method = params.method || 'GET'
+    , body = params.body
+    , method = params.method || (body ? 'POST' : 'GET')
 
   var req = getRequest()
   if (!req) return callback(new Error('no request'))
@@ -11,7 +12,7 @@ exports.ajax = function (params, callback) {
       callback(req.status, req.responseText)
   }
 
-  if (params.body) {
+  if (body) {
     setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   }
@@ -21,7 +22,7 @@ exports.ajax = function (params, callback) {
   for (var field in headers)
     req.setRequestHeader(field, headers[field])
 
-  req.send(params.body)
+  req.send(body)
 }
 
 function getRequest() {
