@@ -40,16 +40,16 @@ Or you can use the global script:
 GET
 
 ```javascript
-nanoajax.ajax('/some-get-url', function (code, responseText) {
-
-})
+nanoajax.ajax('/some-get-url', function (code, responseText) { ... })
 ```
 
 POST
 
 ```javascript
-nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=yaknow'}, function (code, responseText) {
-
+nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=yaknow'}, function (code, responseText, request) {
+    # code is response code
+    # responseText is response body as a string
+    # request is the xmlhttprequest, which has `getResponseHeader(header)` function
 })
 ```
 

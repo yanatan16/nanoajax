@@ -5,11 +5,10 @@ exports.ajax = function (params, callback) {
     , method = params.method || (body ? 'POST' : 'GET')
 
   var req = getRequest()
-  if (!req) return callback(new Error('no request'))
 
   req.onreadystatechange = function () {
     if (req.readyState == 4)
-      callback(req.status, req.responseText)
+      callback(req.status, req.responseText, req)
   }
 
   if (body) {
@@ -30,6 +29,7 @@ function getRequest() {
     return new global.XMLHttpRequest;
   else
     try { return new global.ActiveXObject("MSXML2.XMLHTTP.3.0"); } catch(e) {}
+  throw new Error('no xmlhttp request able to be created')
 }
 
 function setDefault(obj, key, value) {
