@@ -46,10 +46,17 @@ nanoajax.ajax('/some-get-url', function (code, responseText) {
 POST
 
 ```javascript
-nanoajax.ajax('/some-post-url', 'post=content&args=yaknow', function (code, responseText) {
+nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=yaknow'}, function (code, responseText) {
 
 })
 ```
+
+## Options
+
+- `url` required
+- `method` `"GET", "POST", "PUT", etc`
+- `body` string body (if its not url-encoded, make sure to set `Content-Type` header)
+- `headers` header object
 
 ## Compatibility
 

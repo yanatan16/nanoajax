@@ -28,6 +28,10 @@ app.post('/post', function (req, res) {
     res.status(400).send('Bad Request: ' + JSON.stringify(req.body))
 })
 
+app.put('/put', function (req, res) {
+  res.send(Object.keys(req.body).length > 0 ? 'OK' : 'NO body?')
+})
+
 app.get('/error', function (req, res) {
   res.status(500).send('Error')
 })

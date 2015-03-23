@@ -9,7 +9,7 @@ function defineTests(ajax) {
   return function () {
     test('isfunc', function () {
       assert(typeof ajax === 'function')
-      assert(ajax.length === 4)
+      assert(ajax.length === 2)
     })
 
     test('get', function (done) {
@@ -21,7 +21,15 @@ function defineTests(ajax) {
     })
 
     test('post', function (done) {
-      ajax('/post', 'arg=value&foo=bar', function (code, body) {
+      ajax({url: '/post', method: 'POST', body: 'arg=value&foo=bar'}, function (code, body) {
+        assert.equal(body, 'OK')
+        assert.equal(code, 200)
+        done()
+      })
+    })
+
+    test('put', function (done) {
+      ajax({url: '/put', method: 'PUT', body: 'foo=bar'}, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()
@@ -29,7 +37,7 @@ function defineTests(ajax) {
     })
 
     test('error', function (done) {
-      ajax('/error', function (code, body) {
+      ajax({url:'/error'}, function (code, body) {
         assert.strictEqual(body, "Error")
         assert.equal(code, 500)
         done()
@@ -49,7 +57,7 @@ function defineTests(ajax) {
     })
 
     test('extra header', function (done) {
-      ajax('/header', {'X-Custom': 'custom'}, function (code, body) {
+      ajax({url: '/header', headers: {'X-Custom': 'custom'}, method: 'GET'}, function (code, body) {
         assert.equal(body, 'custom')
         assert.equal(code, 200)
         done()
@@ -57,7 +65,10 @@ function defineTests(ajax) {
     })
 
     test('json post', function (done) {
-      ajax('/post', '{"arg":"value","foo":"bar"}', {'Content-Type': 'application/json'}, function (code, body) {
+      ajax({url: '/post',
+            body: '{"arg":"value","foo":"bar"}',
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}}, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()

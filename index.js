@@ -1,6 +1,7 @@
-exports.ajax = function (url, postBody, headers, callback) {
-  if (typeof postBody != 'string') callback = headers, headers = postBody, postBody = null
-  if (typeof headers != 'object') callback = headers, headers = {}
+exports.ajax = function (params, callback) {
+  if (typeof params == 'string') params = {url: params}
+  var headers = params.headers || {}
+    , method = params.method || 'GET'
 
   var req = getRequest()
   if (!req) return callback(new Error('no request'))
@@ -10,18 +11,17 @@ exports.ajax = function (url, postBody, headers, callback) {
       callback(req.status, req.responseText)
   }
 
-  if (postBody) {
-    req.open("POST", url, true)
+  if (params.body) {
     setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
-  } else {
-    req.open("GET", url, true)
   }
+
+  req.open(method, params.url, true)
 
   for (var field in headers)
     req.setRequestHeader(field, headers[field])
 
-  req.send(postBody)
+  req.send(params.body)
 }
 
 function getRequest() {
