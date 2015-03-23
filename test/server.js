@@ -1,6 +1,12 @@
 var express = require('express')
   , fs = require('fs')
+  , localtunnel = require('localtunnel')
   , app = express()
+
+var tunnel = localtunnel(process.env.ZUUL_PORT, function (err, tunnel) {
+  if (err)
+    throw err
+})
 
 app.use(require('morgan')('dev'))
 app.use(require('body-parser').urlencoded({extended:false}))
@@ -23,6 +29,15 @@ app.post('/post', function (req, res) {
 
 app.get('/error', function (req, res) {
   res.status(500).send('Error')
+})
+
+app.get('/cors-url', function (req, res) {
+  res.send(tunnel.url)
+})
+
+app.get('/cors', function (req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.send('COORS')
 })
 
 app.listen(process.env.ZUUL_PORT)
