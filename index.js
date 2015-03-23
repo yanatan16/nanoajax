@@ -1,8 +1,11 @@
-exports.ajax = function (url, postBody, headers, callback) {
-  if (typeof postBody != 'string') callback = headers, headers = postBody, postBody = null
-  if (typeof headers != 'object') callback = headers, headers = {}
+exports.ajax = function (properties, callback) {
+  var url = properties.url
+  var postBody = properties.postBody
+  var headers = properties.headers || {}
+  var method = (properties.method || (postBody ? "POST" : "GET")).toUpperCase()
 
   var req = getRequest()
+
   if (!req) return callback(new Error('no request'))
 
   req.onreadystatechange = function () {
@@ -10,8 +13,8 @@ exports.ajax = function (url, postBody, headers, callback) {
       callback(req.status, req.responseText)
   }
 
-  if (postBody) {
-    req.open("POST", url, true)
+  if (["PUT", "PATCH", "POST"].indexOf(method) > -1) {
+    req.open(method, url, true)
     setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   } else {

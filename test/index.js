@@ -9,11 +9,11 @@ function defineTests(ajax) {
   return function () {
     test('isfunc', function () {
       assert(typeof ajax === 'function')
-      assert(ajax.length === 4)
+      assert(ajax.length === 2)
     })
 
     test('get', function (done) {
-      ajax('/get', function (code, body) {
+      ajax({url: '/get'}, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()
@@ -21,7 +21,10 @@ function defineTests(ajax) {
     })
 
     test('post', function (done) {
-      ajax('/post', 'arg=value&foo=bar', function (code, body) {
+      ajax({
+        url: '/post'
+      , postBody: 'arg=value&foo=bar'
+      }, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()
@@ -29,7 +32,7 @@ function defineTests(ajax) {
     })
 
     test('error', function (done) {
-      ajax('/error', function (code, body) {
+      ajax({url: '/error'}, function (code, body) {
         assert.strictEqual(body, "Error")
         assert.equal(code, 500)
         done()
@@ -37,10 +40,10 @@ function defineTests(ajax) {
     })
 
     test('cors', function (done) {
-      ajax('/cors-url', function (code, body) {
+      ajax({url: '/cors-url'}, function (code, body) {
         assert.equal(code, 200)
         console.log('got cors url', body)
-        ajax(body + '/cors', function (code, body) {
+        ajax({url: body + '/cors'}, function (code, body) {
           assert.equal(code, 200)
           assert.equal(body, 'COORS')
           done()
@@ -49,7 +52,10 @@ function defineTests(ajax) {
     })
 
     test('extra header', function (done) {
-      ajax('/header', {'X-Custom': 'custom'}, function (code, body) {
+      ajax({
+        url: '/header'
+      , headers: {'X-Custom': 'custom'}
+      }, function (code, body) {
         assert.equal(body, 'custom')
         assert.equal(code, 200)
         done()
@@ -57,7 +63,11 @@ function defineTests(ajax) {
     })
 
     test('json post', function (done) {
-      ajax('/post', '{"arg":"value","foo":"bar"}', {'Content-Type': 'application/json'}, function (code, body) {
+      ajax({
+        url: '/post'
+      , postBody: '{"arg":"value","foo":"bar"}'
+      , headers: {'Content-Type': 'application/json'}
+      }, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()
