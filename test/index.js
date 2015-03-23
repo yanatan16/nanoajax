@@ -35,5 +35,17 @@ function defineTests(ajax) {
         done()
       })
     })
+
+    test('cors', function (done) {
+      ajax('/cors-url', function (code, body) {
+        assert.equal(code, 200)
+        console.log('got cors url', body)
+        ajax(body + '/cors', function (code, body) {
+          assert.equal(code, 200)
+          assert.equal(body, 'COORS')
+          done()
+        })
+      })
+    })
   }
 }
