@@ -1,5 +1,6 @@
-exports.ajax = function (url, postBody, callback) {
-  if (!callback) callback = postBody, postBody = null
+exports.ajax = function (url, postBody, headers, callback) {
+  if (typeof postBody != 'string') callback = headers, headers = postBody, postBody = null
+  if (typeof headers != 'object') callback = headers, headers = {}
 
   var req = getRequest()
   if (!req) return callback(new Error('no request'))
@@ -11,11 +12,14 @@ exports.ajax = function (url, postBody, callback) {
 
   if (postBody) {
     req.open("POST", url, true)
-    req.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
+    setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   } else {
     req.open("GET", url, true)
   }
+
+  for (var field in headers)
+    req.setRequestHeader(field, headers[field])
 
   req.send(postBody)
 }
@@ -25,4 +29,8 @@ function getRequest() {
     return new global.XMLHttpRequest;
   else
     try { return new global.ActiveXObject("MSXML2.XMLHTTP.3.0"); } catch(e) {}
+}
+
+function setDefault(obj, key, value) {
+  obj[key] = obj[key] || value
 }
