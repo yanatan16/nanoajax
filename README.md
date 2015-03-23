@@ -9,6 +9,10 @@ An ajax library you need a microscope to see.
 
 Weighs in at 356 bytes gzipped, 534 bytes minified. It is very basic, but cross-browser compatible
 
+## Releases
+
+The latest release (v0.2) includes custom header support but is larger than the previous release, v0.1.1.
+
 ## Install
 
 Can be used via browserify:
@@ -46,6 +50,12 @@ nanoajax.ajax('/some-post-url', 'post=content&args=yaknow', function (code, resp
 
 })
 ```
+
+## Compatibility
+
+`nanoajax` works on android, ios, IE8+, and all modern browsers.
+
+_CORS Note_: `nanoajax` does _not_ support IE8 cross-domain requests.
 
 ## License
 

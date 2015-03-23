@@ -39,12 +39,18 @@ function defineTests(ajax) {
     test('cors', function (done) {
       ajax('/cors-url', function (code, body) {
         assert.equal(code, 200)
-        console.log('got cors url', body)
+        body = body.replace(/https?/, window.location.toString().split('://')[0])
+        console.log('got cors url ' + body)
+        try {
         ajax(body + '/cors', function (code, body) {
-          assert.equal(code, 200)
+          if (/MSIE8/.test(window.navigator.userAgent))
+            assert.equal(code, null)
+          else
+            assert.equal(code, 200)
           assert.equal(body, 'COORS')
           done()
         })
+      } catch(e) { console.log (e.toString())}
       })
     })
 
