@@ -59,6 +59,7 @@ nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=y
 - `method` `"GET", "POST", "PUT", etc`
 - `body` string body (if its not url-encoded, make sure to set `Content-Type` header)
 - `headers` header object
+- `withCredentials` `true or false` only applicable to CORS (does not work in IE)
 
 ## Compatibility
 

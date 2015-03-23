@@ -3,8 +3,14 @@ exports.ajax = function (params, callback) {
   var headers = params.headers || {}
     , body = params.body
     , method = params.method || (body ? 'POST' : 'GET')
+    , withCredentials = params.withCredentials || false
 
   var req = getRequest()
+
+  // has no effect in IE
+  // has no effect for same-origin requests
+  // has no effect in CORS if user has disabled 3rd party cookies
+  req.withCredentials = withCredentials
 
   req.onreadystatechange = function () {
     if (req.readyState == 4)
