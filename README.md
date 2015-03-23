@@ -9,6 +9,8 @@ An ajax library you need a microscope to see.
 
 Weighs in at 403 bytes gzipped, 613 bytes minified. It is very basic, but cross-browser compatible
 
+_NOTE_: The `POST` api has changed in version v0.2.1, see second example below for details.
+
 ## Releases
 
 The latest release (v0.2.1) includes custom header support but is larger than the previous release, v0.1.1.
