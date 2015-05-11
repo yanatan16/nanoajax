@@ -7,7 +7,7 @@ nanoajax
 
 An ajax library you need a microscope to see.
 
-Weighs in at 415 bytes gzipped, 623 bytes minified. It is very basic, but cross-browser compatible
+Weighs in at 503 bytes gzipped, 749 bytes minified. It is very basic, but cross-browser compatible
 
 _NOTE_: The `POST` api has changed in version v0.2.1, see second example below for details.
 
@@ -57,9 +57,10 @@ nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=y
 
 - `url` required
 - `method` `"GET", "POST", "PUT", etc`
-- `body` string body (if its not url-encoded, make sure to set `Content-Type` header)
+- `body` string body (if it's not url-encoded, make sure to set `Content-Type` header)
 - `headers` header object
 - `withCredentials` `true or false` only applicable to CORS (does not work in IE)
+- `progressCallback` [XHR callback](https://developer.mozilla.org/de/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Monitoring_progress) for upload progress (won't get called in IE8 and IE9)
 
 ## Compatibility
 
