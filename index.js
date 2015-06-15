@@ -4,6 +4,7 @@ exports.ajax = function (params, callback) {
     , body = params.body
     , method = params.method || (body ? 'POST' : 'GET')
     , withCredentials = params.withCredentials || false
+    , progressCallback = params.progressCallback || null
 
   var req = getRequest()
 
@@ -15,6 +16,10 @@ exports.ajax = function (params, callback) {
   req.onreadystatechange = function () {
     if (req.readyState == 4)
       callback(req.status, req.responseText, req)
+  }
+  
+  if (req.upload && progressCallback) {
+    req.upload.onprogress = progressCallback
   }
 
   if (body) {
