@@ -5,4 +5,4 @@ before_script:
 - npm install -g zuul
 env:
   global:
-    secure: JVRszN2u//7UkoTyHsR9N9iuu+Dy1VsGwaEZo5Jy8oDEQA0gW62wn+l2WbRumVCV0fUQAAjLPzmCygeZe0UE1WeJYguWDHwrZuPriA581fY4gvzrx/AF+y2y1Adg9HXkaCU6tgPB/3LODusycb8z1YVBmwJj51y9MpcE0UOwGX0=
+    secure: uKTnf+qXcwzEINNaf0XbWJtwhQCHvTNXTWCIeTPJmWcoXXzDkHdQfjZLkaC6clqruqYoTABtE8imEliZobM3rABrYSQ67oub+pPFS+Z6khBkmOPkfTVMF3k2psKZhmjllLiiiYzlwCTDIEg+96S4u+rVcl2HNOlTNa2g+xdA6z4=
