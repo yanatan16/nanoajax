@@ -17,11 +17,17 @@ The latest release (v0.2.1) includes custom header support but is larger than th
 
 ## Install
 
-Can be used via browserify:
+You can use npm or bower :
 
 ```
-npm install nanoajax
+npm install --save nanoajax
 ```
+
+```
+bower install --save nanoajax
+```
+
+Can be used via browserify:
 
 ```javascript
 var nanoajax = require('nanoajax')
