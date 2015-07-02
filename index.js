@@ -15,16 +15,17 @@ var reqfields = [
 //
 // The following parameters are passed onto the xhr object.
 // The caller is responsible for compatibility checking.
-//  - responseType: string, various compatability, see xhr docs for enum options
-//  - withCredentials: boolean, IE10+, CORS only
-//  - onerror: callback, IE8+ (confirm?), CORS only
-//  - timeout: long, ms timeout, IE8+
-//  - ontimeout: callback, IE8+
-//  - onabort: callback
-//  - onprogress: callback, IE10+
+ // - responseType: string, various compatability, see xhr docs for enum options
+ // - withCredentials: boolean, IE10+, CORS only
+ // - onerror: callback, IE8+ (confirm?), CORS only
+ // - timeout: long, ms timeout, IE8+
+ // - ontimeout: callback, IE8+
+ // - onabort: callback
+ // - onprogress: callback, IE10+
 //
 // Returns the XHR object. So you can call .abort() or other methods
 exports.ajax = function (params, callback) {
+  if (typeof params == 'string') params = {url: params}
   var headers = params.headers || {}
     , body = params.body
     , method = params.method || (body ? 'POST' : 'GET')
@@ -41,7 +42,7 @@ exports.ajax = function (params, callback) {
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   }
 
-  req.open(method, typeof params === 'string' ? params : params.url, true)
+  req.open(method, params.url, true)
 
   for (var i = 0, len = reqfields.length, field; i < len; i++) {
     field = reqfields[i]
