@@ -1,15 +1,39 @@
+// Best place to find information on XHR features is:
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpReques
+
+var reqfields = [
+  'responseType', 'withCredentials', 'onerror',
+  'timeout', 'ontimeout', 'onabort', 'onprogress'
+]
+
+// Simple ajax function of parameter argument and oncomplete callback
+// Parameters:
+//  - url: string, required
+//  - headers: object
+//  - body: string (sets content type if not set in headers)
+//  - method: 'GET', 'POST', etc. Defaults to 'GET' or 'POST' based on body
+//
+// The following parameters are passed onto the xhr object.
+// The caller is responsible for compatibility checking.
+//  - responseType: string, various compatability, see xhr docs for enum options
+//  - withCredentials: boolean, IE10+, CORS only
+//  - onerror: callback, IE8+ (confirm?), CORS only
+//  - timeout: long, ms timeout, IE8+
+//  - ontimeout: callback, IE8+
+//  - onabort: callback
+//  - onprogress: callback, IE10+
+//
+// Returns the XHR object. So you can call .abort() or other methods
 exports.ajax = function (params, callback) {
-  if (typeof params == 'string') params = {url: params}
   var headers = params.headers || {}
     , body = params.body
     , method = params.method || (body ? 'POST' : 'GET')
-    , withCredentials = params.withCredentials || false
 
   var req = getRequest()
 
   req.onreadystatechange = function () {
     if (req.readyState == 4)
-      callback(req.status, req.responseText, req)
+      callback(req.status, req.response, req)
   }
 
   if (body) {
@@ -17,17 +41,20 @@ exports.ajax = function (params, callback) {
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   }
 
-  req.open(method, params.url, true)
+  req.open(method, typeof params === 'string' ? params : params.url, true)
 
-  // has no effect in IE
-  // has no effect for same-origin requests
-  // has no effect in CORS if user has disabled 3rd party cookies
-  req.withCredentials = withCredentials
+  for (var i = 0, len = reqfields.length, field; i < len; i++) {
+    field = reqfields[i]
+    if (params[field] !== undefined)
+      req[field] = params[field]
+  }
 
   for (var field in headers)
     req.setRequestHeader(field, headers[field])
 
   req.send(body)
+
+  return req
 }
 
 function getRequest() {
