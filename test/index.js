@@ -45,10 +45,9 @@ function defineTests(ajax) {
     })
 
     test('cors', function (done) {
-      ajax('/cors-url', function (code, body) {
+      ajax('/cors-url', function (code, body, req) {
         assert.equal(code, 200)
-        console.log('got cors url', body)
-        ajax(body + '/cors', function (code, body) {
+        ajax({url: body + '/cors', cors: true}, function (code, body) {
           assert.equal(code, 200)
           assert.equal(body, 'COORS')
           done()
@@ -75,21 +74,25 @@ function defineTests(ajax) {
       })
     })
 
-    test('withCredentials', function (done) {
-      ajax('/cors-url', function (code, body) {
-        ajax({
-          url: body + '/cookie-setter'
-        , withCredentials: true
-        }, function (code, cookieValue) {
+    if (!/MSIE ([6-9])/.test(navigator.userAgent)) {
+      test('withCredentials', function (done) {
+        ajax('/cors-url', function (code, corsdomain) {
           ajax({
-            url: body + '/cookie-verifier?cookie_value=' + cookieValue
+            url: corsdomain + '/cookie-setter'
           , withCredentials: true
-          }, function (code) {
-            assert.equal(code, 200, 'Server could not verify cookie value')
-            done()
+          , cors: true
+          }, function (code, cookieValue) {
+            ajax({
+              url: corsdomain + '/cookie-verifier?cookie_value=' + cookieValue
+            , withCredentials: true
+            , cors: true
+            }, function (code, response, req) {
+              assert.equal(response, 'OK')
+              done()
+            })
           })
         })
       })
-    })
+    }
   }
 }

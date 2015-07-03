@@ -8,6 +8,11 @@ var tunnel = localtunnel(process.env.ZUUL_PORT, function (err, tunnel) {
     throw err
 })
 
+function corsify(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', req.get('origin'))
+  res.setHeader('Access-Control-Allow-Credentials', true)
+}
+
 app.use(require('morgan')('dev'))
 app.use(require('body-parser').urlencoded({extended:false}))
 app.use(require('body-parser').json())
@@ -42,7 +47,7 @@ app.get('/cors-url', function (req, res) {
 })
 
 app.get('/cors', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  corsify(req, res)
   res.send('COORS')
 })
 
@@ -52,15 +57,13 @@ app.get('/header', function (req, res) {
 
 app.get('/cookie-setter', function (req, res) {
   var randomNumber = Math.random() + ''
+  corsify(req, res)
   res.cookie('doge', randomNumber)
-  res.setHeader('Access-Control-Allow-Origin', req.get('origin'))
-  res.setHeader('Access-Control-Allow-Credentials', true)
   res.send(randomNumber)
 })
 
 app.get('/cookie-verifier', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', req.get('origin'))
-  res.setHeader('Access-Control-Allow-Credentials', true)
+  corsify(req, res)
 
   if (req.query.cookie_value !== req.cookies.doge) {
     res.status(500).send('Could not verify cookie')
