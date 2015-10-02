@@ -1,8 +1,6 @@
 nanoajax
 ========
 
-[![Build Status](https://travis-ci.org/yanatan16/nanoajax.svg)](https://travis-ci.org/yanatan16/nanoajax)
-
 An ajax library you need a microscope to see.
 
 Weighs in at **556 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers.
