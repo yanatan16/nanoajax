@@ -1,47 +1,68 @@
 // Best place to find information on XHR features is:
-// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpReques
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 
 var reqfields = [
   'responseType', 'withCredentials', 'timeout', 'onprogress'
 ]
 
-// Simple ajax function of parameter argument and oncomplete callback
+// Simple and small ajax function
+// Takes a parameters object and a callback function
 // Parameters:
 //  - url: string, required
-//  - headers: object
-//  - body: string (sets content type if not set in headers)
+//  - headers: object of `{header_name: header_value, ...}`
+//  - body: string (sets content type to 'application/x-www-form-urlencoded' if not set in headers)
 //  - method: 'GET', 'POST', etc. Defaults to 'GET' or 'POST' based on body
 //  - cors: If your using cross-origin, you will need this true for IE8-9
 //
 // The following parameters are passed onto the xhr object.
-// The caller is responsible for compatibility checking.
- // - responseType: string, various compatability, see xhr docs for enum options
- // - withCredentials: boolean, IE10+, CORS only
- // - timeout: long, ms timeout, IE8+
- // - onprogress: callback, IE10+
+// IMPORTANT NOTE: The caller is responsible for compatibility checking.
+//  - responseType: string, various compatability, see xhr docs for enum options
+//  - withCredentials: boolean, IE10+, CORS only
+//  - timeout: long, ms timeout, IE8+
+//  - onprogress: callback, IE10+
 //
-// Returns the XHR object. So you can call .abort() or other methods
+// Callback function prototype:
+//  - statusCode from request
+//  - response
+//    + if responseType set and supported by browser, this is an object of some type (see docs)
+//    + otherwise if request completed, this is the string text of the response
+//    + if request is aborted, this is "Abort"
+//    + if request times out, this is "Timeout"
+//    + if request errors before completing (probably a CORS issue), this is "Error"
+//  - request object
+//
+// Returns the request object. So you can call .abort() or other methods
+//
+// DEPRECATIONS:
+//  - Passing a string instead of the params object has been removed!
+//
 exports.ajax = function (params, callback) {
-  if (typeof params == 'string') params = {url: params}
+  // Any variable used more than once is var'd here because
+  // minification will munge the variables whereas it can't munge
+  // the object access.
   var headers = params.headers || {}
     , body = params.body
     , method = params.method || (body ? 'POST' : 'GET')
     , called = false
 
-  function cb(ds, rs) {
+  var req = getRequest(params.cors)
+
+  function cb(statusCode, responseText) {
     return function () {
       if (!called)
-        callback(req.status || ds, req.response || req.responseText || rs, req)
+        callback(req.status || statusCode,
+                 req.response || req.responseText || responseText,
+                 req)
       called = true
     }
   }
 
-  var req = getRequest(params.cors)
+  req.open(method, params.url, true)
 
+  var success = req.onload = cb(200)
   req.onreadystatechange = function () {
-    if (req.readyState === 4) cb(200)()
+    if (req.readyState === 4) success()
   }
-  req.onload = cb(200)
   req.onerror = cb(null, 'Error')
   req.ontimeout = cb(null, 'Timeout')
   req.onabort = cb(null, 'Abort')
@@ -50,8 +71,6 @@ exports.ajax = function (params, callback) {
     setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
     setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
   }
-
-  req.open(method, params.url, true)
 
   for (var i = 0, len = reqfields.length, field; i < len; i++) {
     field = reqfields[i]
@@ -68,12 +87,15 @@ exports.ajax = function (params, callback) {
 }
 
 function getRequest(cors) {
-  if (global.XDomainRequest && cors)
+  // XDomainRequest is only way to do CORS in IE 8 and 9
+  // But XDomainRequest isn't standards-compatible
+  // Notably, it doesn't allow cookies to be sent or set by servers
+  // IE 10+ is standards-compatible in its XMLHttpRequest
+  // but IE 10 can still have an XDomainRequest object, so we don't want to use it
+  if (cors && global.XDomainRequest && !/MSIE 1/.test(navigator.userAgent))
     return new XDomainRequest
   if (global.XMLHttpRequest)
     return new XMLHttpRequest
-  try { return new global.ActiveXObject("MSXML2.XMLHTTP.3.0"); } catch(e) {}
-  throw new Error('no xmlhttp request able to be created')
 }
 
 function setDefault(obj, key, value) {

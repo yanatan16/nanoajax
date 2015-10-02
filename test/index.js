@@ -2,6 +2,14 @@ var assert = require('assert')
 
 var njx = require('../index')
 
+var userAgent = navigator.userAgent
+  , isChrome = userAgent.indexOf('Chrome') > -1
+  , isIE = userAgent.indexOf('MSIE') > -1
+  , isFirefox = userAgent.indexOf('Firefox') > -1
+  , isSafari = userAgent.indexOf("Safari") > -1 && !isChrome
+  , isOpera = userAgent.toLowerCase().indexOf("op") > -1
+  , IEversion = isIE ? parseInt(userAgent.match(/MSIE (\d+)/)[1]) : 0
+
 suite('browserify', defineTests(njx.ajax))
 suite('minified', defineTests(window.nanoajax.ajax))
 
@@ -13,7 +21,7 @@ function defineTests(ajax) {
     })
 
     test('get', function (done) {
-      ajax('/get', function (code, body) {
+      ajax({url:'/get'}, function (code, body) {
         assert.equal(body, 'OK')
         assert.equal(code, 200)
         done()
@@ -44,16 +52,20 @@ function defineTests(ajax) {
       })
     })
 
-    test('cors', function (done) {
-      ajax('/cors-url', function (code, body, req) {
-        assert.equal(code, 200)
-        ajax({url: body + '/cors', cors: true}, function (code, body) {
+    // CORS can be done in IE 6 and 7, but it takes more than this library provides
+    // See easyXDM or jQuery 1.x
+    if (!(isIE && IEversion < 8)) {
+      test('cors', function (done) {
+        ajax({url:'/cors-url'}, function (code, body, req) {
           assert.equal(code, 200)
-          assert.equal(body, 'COORS')
-          done()
+          ajax({url: body + '/cors', cors: true}, function (code, body) {
+            assert.equal(code, 200)
+            assert.equal(body, 'COORS')
+            done()
+          })
         })
       })
-    })
+    }
 
     test('extra header', function (done) {
       ajax({url: '/header', headers: {'X-Custom': 'custom'}, method: 'GET'}, function (code, body) {
@@ -74,19 +86,31 @@ function defineTests(ajax) {
       })
     })
 
-    if (!/MSIE ([6-9])/.test(navigator.userAgent)) {
-      test('withCredentials', function (done) {
-        ajax('/cors-url', function (code, corsdomain) {
-          ajax({
-            url: corsdomain + '/cookie-setter'
-          , withCredentials: true
-          , cors: true
-          }, function (code, cookieValue) {
-            ajax({
-              url: corsdomain + '/cookie-verifier?cookie_value=' + cookieValue
-            , withCredentials: true
-            , cors: true
-            }, function (code, response, req) {
+    // Safari:
+    //   According to some StackOverflow pages,
+    //   Safari ships with a conservative cookie policy which limits cookie writes
+    //   to only the pages chosen ("navigated to") by the user.
+    //   Since this url hasn't been navigated to, this wont work in Safari.
+    // IE < 10:
+    //   http://blogs.msdn.com/b/ieinternals/archive/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds.aspx
+    //   IE's XDomainRequest just doesn't do CORS cookies
+    if (!isSafari && !(isIE && IEversion < 10)) {
+      test('cors-cookies', function (done) {
+        ajax({url:'/cors-url'}, function (code, corsdomain) {
+          var args = {url: corsdomain + '/cookie-setter'
+                    , cors: true
+                    , withCredentials: true
+                  }
+
+          ajax(args, function (code, cookieValue) {
+            console.log('code/cookievalue: ' + code + ' / ' + cookieValue)
+            assert.equal(code, 200)
+            assert(/\d+/.test(cookieValue))
+
+            args.url = corsdomain + '/cookie-verifier?cookie_value=' + cookieValue
+
+            ajax(args, function (code, response, req) {
+              console.log('RESPONSE: ' + code + ' / ' + response)
               assert.equal(response, 'OK')
               done()
             })

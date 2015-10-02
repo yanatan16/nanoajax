@@ -3,21 +3,18 @@ nanoajax
 
 [![Build Status](https://travis-ci.org/yanatan16/nanoajax.svg)](https://travis-ci.org/yanatan16/nanoajax)
 
-
-
 An ajax library you need a microscope to see.
 
-Weighs in at 415 bytes gzipped, 623 bytes minified. It is very basic, but cross-browser compatible
+Weighs in at **556 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers.
 
-_NOTE_: The `POST` api has changed in version v0.2.1, see second example below for details.
+## API Changes
 
-## Releases
-
-The latest release (v0.2.1) includes custom header support but is larger than the previous release, v0.1.1.
+- Passing a string url instead of a params object has been removed in `v0.4.0`
+- The params object was introduced in `v0.2.1`, and is the only way to use `POST` requests.
 
 ## Install
 
-You can use npm or bower :
+You can use npm or bower:
 
 ```
 npm install --save nanoajax
@@ -46,7 +43,7 @@ Or you can use the global script:
 GET
 
 ```javascript
-nanoajax.ajax('/some-get-url', function (code, responseText) { ... })
+nanoajax.ajax({url:'/some-get-url'}, function (code, responseText) { ... })
 ```
 
 POST
@@ -59,19 +56,50 @@ nanoajax.ajax({url: '/some-post-url', method: 'POST', body: 'post=content&args=y
 })
 ```
 
-## Options
+## Documentation
 
-- `url` required
-- `method` `"GET", "POST", "PUT", etc`
-- `body` string body (if its not url-encoded, make sure to set `Content-Type` header)
-- `headers` header object
-- `withCredentials` `true or false` only applicable to CORS (does not work in IE)
+```
+var xhrRequest = nanoajax.ajax(params, callback)
+```
+
+Simple and small ajax function. Takes a parameters object and a callback function.
+
+Parameters:
+
+- `url`: string, required
+- `headers`: object of `{header_name: header_value, ...}`
+- `body`: string (sets content type to 'application/x-www-form-urlencoded' if not set in headers)
+- `method`: 'GET', 'POST', etc. Defaults to 'GET' or 'POST' based on body
+- `cors`: If your using cross-origin, you will need this true for IE8-9 (to use the XDomainRequest object, also see [Compatibility](#compatibility))
+
+The following parameters are passed directly onto the request object:
+
+**IMPORTANT NOTE**: The caller is responsible for compatibility checking.
+
+- `responseType`: string, various compatability, see xhr docs for enum options
+- `withCredentials`: boolean, IE10+, CORS only
+- `timeout`: long, ms timeout, IE8+
+- `onprogress`: callback, IE10+
+
+Callback function prototype:
+
+- `statusCode`: integer status or null
+- `response`:
+    + if `responseType` set and supported by browser, this is an object of some type (see docs)
+    + otherwise if request completed, this is the string text of the response
+    + if request is aborted, this is `"Abort"`
+    + if request times out, this is `"Timeout"`
+    + if request errors before completing (probably a CORS issue), this is `"Error"`
+- request object
+
+Returns the request object. So you can call .abort() or other methods
 
 ## Compatibility
 
-`nanoajax` works on android, ios, IE8+, and all modern browsers.
+`nanoajax` works on android, iOS, IE8+, and all modern browsers, with some (_known_) caveats.
 
-_CORS Note_: `nanoajax` does _not_ support IE8 cross-domain requests.
+- Safari is conservative with cookies and will not allow cross-domain cookies to be set from domains that have never been visited by the user.
+- IE8 and IE9 do not support cookies in cross-domain requests in this library. There are other solutions out there, but this library has chosen small over edge case compatibility.
 
 ## License
 
