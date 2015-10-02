@@ -8,6 +8,17 @@ var tunnel = localtunnel(process.env.ZUUL_PORT, function (err, tunnel) {
     throw err
 })
 
+function corsify(req, res) {
+  // IE 6-7 requires this P3P header
+  res.setHeader('P3P', 'CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"')
+
+  // Standards-compatible CORS headers
+  res.setHeader('Access-Control-Allow-Origin', req.get('origin') || '*')
+  res.setHeader('Access-Control-Allow-Credentials', true)
+
+  res.setHeader('Cache-Control', 'no-cache')
+}
+
 app.use(require('morgan')('dev'))
 app.use(require('body-parser').urlencoded({extended:false}))
 app.use(require('body-parser').json())
@@ -42,7 +53,7 @@ app.get('/cors-url', function (req, res) {
 })
 
 app.get('/cors', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  corsify(req, res)
   res.send('COORS')
 })
 
@@ -51,19 +62,18 @@ app.get('/header', function (req, res) {
 })
 
 app.get('/cookie-setter', function (req, res) {
-  var randomNumber = Math.random() + ''
+  var randomNumber = (Math.random() + '').substr(2)
+  corsify(req, res)
   res.cookie('doge', randomNumber)
-  res.setHeader('Access-Control-Allow-Origin', req.get('origin'))
-  res.setHeader('Access-Control-Allow-Credentials', true)
   res.send(randomNumber)
 })
 
 app.get('/cookie-verifier', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', req.get('origin'))
-  res.setHeader('Access-Control-Allow-Credentials', true)
+  corsify(req, res)
 
   if (req.query.cookie_value !== req.cookies.doge) {
-    res.status(500).send('Could not verify cookie')
+    console.log('Cookie values differ! ' + req.query.cookie_value + ' vs ' + req.cookies.doge)
+    res.status(200).send('Could not verify cookie')
   } else {
     res.send('OK')
   }
