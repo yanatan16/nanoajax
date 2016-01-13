@@ -50,7 +50,7 @@ exports.ajax = function (params, callback) {
   function cb(statusCode, responseText) {
     return function () {
       if (!called)
-        callback(req.status || statusCode,
+        callback(req.status === undefined ? statusCode : req.status,
                  req.response || req.responseText || responseText,
                  req)
       called = true
