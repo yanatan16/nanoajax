@@ -1,7 +1,7 @@
 {
   "name": "nanoajax",
   "main": "nanoajax.min.js",
-  "version": "0.2.4",
+  "version": "0.4.1",
   "homepage": "https://github.com/yanatan16/nanoajax",
   "authors": [
     "Jon Eisen <jon@joneisen.me>"
