@@ -69,7 +69,10 @@ exports.ajax = function (params, callback) {
 
   if (body) {
     setDefault(headers, 'X-Requested-With', 'XMLHttpRequest')
-    setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
+
+    if (!global.FormData || !(body instanceof global.FormData)) {
+      setDefault(headers, 'Content-Type', 'application/x-www-form-urlencoded')
+    } 
   }
 
   for (var i = 0, len = reqfields.length, field; i < len; i++) {
