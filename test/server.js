@@ -23,6 +23,7 @@ app.use(require('morgan')('dev'))
 app.use(require('body-parser').urlencoded({extended:false}))
 app.use(require('body-parser').json())
 app.use(require('cookie-parser')())
+app.use(require('multer')({ dest: 'temp/ '}).any())
 
 app.get('/nanoajax.min.js', function (req, res) {
   fs.createReadStream(__dirname + '/../nanoajax.min.js', {encoding:'utf8'})

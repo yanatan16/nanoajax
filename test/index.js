@@ -86,6 +86,22 @@ function defineTests(ajax) {
       })
     })
 
+    if (window.FormData) {
+      test('FormData post', function (done) {
+        var formData = new FormData();
+        formData.append("arg", "value");
+        formData.append("foo", "bar");
+
+        ajax({url: '/post',
+              body: formData,
+              method: 'POST' }, function (code, body) {
+          assert.equal(body, 'OK')
+          assert.equal(code, 200)
+          done()
+        })
+      })
+    }
+
     // Safari:
     //   According to some StackOverflow pages,
     //   Safari ships with a conservative cookie policy which limits cookie writes
