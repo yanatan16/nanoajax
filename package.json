@@ -1,6 +1,6 @@
 {
   "name": "nanoajax",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A small ajax lib",
   "main": "index.js",
   "directories": {
