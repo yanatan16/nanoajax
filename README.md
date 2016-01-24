@@ -67,7 +67,9 @@ Parameters:
 
 - `url`: string, required
 - `headers`: object of `{header_name: header_value, ...}`
-- `body`: string (sets content type to 'application/x-www-form-urlencoded' if not set in headers)
+- `body`:
+    + string (sets content type to 'application/x-www-form-urlencoded' if not set in headers)
+    + FormData (doesn't set content type so that browser will set as appropriate)
 - `method`: 'GET', 'POST', etc. Defaults to 'GET' or 'POST' based on body
 - `cors`: If your using cross-origin, you will need this true for IE8-9 (to use the XDomainRequest object, also see [Compatibility](#compatibility))
 
