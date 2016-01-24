@@ -23,7 +23,7 @@ npm install --save nanoajax
 bower install --save nanoajax
 ```
 
-Can be used via browserify:
+Can be used via browserify or webpack:
 
 ```javascript
 var nanoajax = require('nanoajax')
