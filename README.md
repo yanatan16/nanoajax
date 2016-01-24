@@ -3,12 +3,13 @@ nanoajax
 
 An ajax library you need a microscope to see.
 
-Weighs in at **586 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers.
+Weighs in at **614 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers.
 
 ## API Changes
 
 - Passing a string url instead of a params object has been removed in `v0.4.0`
 - The params object was introduced in `v0.2.1`, and is the only way to use `POST` requests.
+- Passing a FormData object as the body will cause the Content Type header to not be set, as appropriate.
 
 ## Install
 
@@ -102,4 +103,3 @@ Returns the request object. So you can call .abort() or other methods
 ## License
 
 MIT found in `LICENSE` file.
-
