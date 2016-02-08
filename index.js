@@ -25,6 +25,7 @@ var reqfields = [
 //
 // Callback function prototype:
 //  - statusCode from request
+//    + Possibly null or 0 (i.e. falsy) if an error occurs
 //  - response
 //    + if responseType set and supported by browser, this is an object of some type (see docs)
 //    + otherwise if request completed, this is the string text of the response
