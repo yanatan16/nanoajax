@@ -3,7 +3,7 @@ nanoajax
 
 An ajax library you need a microscope to see.
 
-Weighs in at **614 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers.
+Weighs in at **620 bytes** gzipped and minified. It is very basic, but contains support for cross-domain requests back to somewhat older browsers (See [Compatibility](#compatibility)).
 
 ## API Changes
 
@@ -85,6 +85,7 @@ The following parameters are passed directly onto the request object:
 Callback function prototype:
 
 - `statusCode`: integer status or null
+    + if request errors for some browsers (notably Chrome), this is 0 (and `response` is "Error")
 - `response`:
     + if `responseType` set and supported by browser, this is an object of some type (see docs)
     + otherwise if request completed, this is the string text of the response
