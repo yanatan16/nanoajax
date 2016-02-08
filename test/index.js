@@ -137,6 +137,7 @@ function defineTests(ajax) {
       test('no-connection', function (done) {
         ajax({url:'http://localhost:0000'}, function (code, resp) {
           assert.equal(code, 0)
+          assert.equal(resp, "Error")
           done()
         })
       })

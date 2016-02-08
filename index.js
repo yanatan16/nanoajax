@@ -51,11 +51,12 @@ exports.ajax = function (params, callback) {
 
   function cb(statusCode, responseText) {
     return function () {
-      if (!called)
+      if (!called) {
         callback(req.status === undefined ? statusCode : req.status,
-                 req.response || req.responseText || responseText,
+                 req.status === 0 ? "Error" : (req.response || req.responseText || responseText),
                  req)
-      called = true
+        called = true
+      }
     }
   }
 
