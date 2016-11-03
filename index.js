@@ -81,8 +81,13 @@ exports.ajax = function (params, callback) {
 
   for (var i = 0, len = reqfields.length, field; i < len; i++) {
     field = reqfields[i]
-    if (params[field] !== undefined)
-      req[field] = params[field]
+    if (params[field] !== undefined){
+      if(body && global.FormData && body instanceof global.FormData && field == 'onprogress'){
+        req.upload[field] = params[field];
+      }else{
+        req[field] = params[field];
+      }
+    }
   }
 
   for (var field in headers)
