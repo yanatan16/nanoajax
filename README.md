@@ -71,6 +71,7 @@ Parameters:
     + string (sets content type to 'application/x-www-form-urlencoded' if not set in headers)
     + FormData (doesn't set content type so that browser will set as appropriate)
 - `method`: 'GET', 'POST', etc. Defaults to 'GET' or 'POST' based on body
+- `onprogress`: function callback, will be called multiple times with a progress event when uploading files using FormData
 - `cors`: If your using cross-origin, you will need this true for IE8-9 (to use the XDomainRequest object, also see [Compatibility](#compatibility))
 
 The following parameters are passed directly onto the request object:
