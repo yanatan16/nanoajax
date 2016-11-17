@@ -100,6 +100,28 @@ function defineTests(ajax) {
           done()
         })
       })
+
+      test('FormData progress', function(done){
+        var formData = new FormData();
+        formData.append("arg", "value");
+        formData.append("foo", "bar");
+
+        var isLengthComputable = false;
+
+        var progressHandler = function(e){
+          isLengthComputable = e.lengthComputable;
+        }
+
+        ajax({url: '/post',
+              body: formData,
+              method: 'POST',
+              onprogress: progressHandler
+        }, function (code, body) {
+          assert.equal(isLengthComputable, true)
+          done()
+        })
+
+      })
     }
 
     // Safari:
