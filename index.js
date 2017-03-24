@@ -82,7 +82,9 @@ exports.ajax = function (params, callback) {
   for (var i = 0, len = reqfields.length, field; i < len; i++) {
     field = reqfields[i]
     if (params[field] !== undefined)
-      req[field] = params[field]
+      try {
+        req[field] = params[field]
+      } catch (e) {}
   }
 
   for (var field in headers)
